@@ -93,7 +93,7 @@ sleep 3
 # sleep 3
 # 安装常用软件
 pacstrap /mnt networkmanager vim sudo fish git wget nano htop neofetch yay openssh screen wireless-regdb wireless_tools wpa_supplicant cronie wqy-zenhei timeshift grub efibootmgr os-prober 
-pacstrap /mnt firefox firefox-i18n-zh-cn
+pacstrap /mnt firefox firefox-i18n-zh-cn ttf-jetbrains-mono-nerd noto-fonts-emoji
 
 # 引导程序
   
