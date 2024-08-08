@@ -117,7 +117,12 @@ echo "aw" > /mnt/etc/hostname
 echo "127.0.0.1   localhost
 ::1         localhost
 127.0.1.1   aw.localdomain aw" >> /mnt/etc/hosts
-
+#设置fcitx5输入法环境
+###########################################
+echo "GTK_IM_MODULE=fcitx" >> /mnt/etc/environment
+echo "QT_IM_MODULE=fcitx" >> /mnt/etc/environment
+echo "XMODIFIERS=@im=fcitx" >> /mnt/etc/environment
+echo "SDL_IM_MODULE=fcitx" >> /mnt/etc/environment
 ##############对新系统进行换源操作###############################
 mv /mnt/etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist.back
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
