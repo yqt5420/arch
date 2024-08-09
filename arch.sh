@@ -78,7 +78,8 @@ mkdir -p /mnt/{boot,home}
 mount -t btrfs -o subvol=/@home,compress=lzo "$root_dir" /mnt/home
 # 挂载 boot 分区
 mount "$boot_dir" /mnt/boot
-
+# 更新一下pacman密钥，不然直接复制过去的pacman.conf文件会报错
+pacman -Sy
 
 
 
@@ -141,8 +142,12 @@ echo "locale-gen" >> /mnt/root/set.sh
 #安装引导程序到boot分区
 echo "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ARCH" >> /mnt/root/set.sh
 #修改grub配置文件
-echo "sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3 quiet\"/GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3 nowatchdog\"/g' /etc/default/grub" >> /mnt/root/set.sh
+echo "sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=\"loglevel=3 quiet\"/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet splash\"/g' /etc/default/grub" >> /mnt/root/set.sh
 echo "sed -i 's/#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/g' /etc/default/grub" >> /mnt/root/set.sh
+#下载并设置grub主题
+echo "curl -o /usr/share/grub/themes/yuan.tar.gz https://mirror.ghproxy.com/https://raw.githubusercontent.com/voidlhf/StarRailGrubThemes/master/themes/Yunli_cn.tar.gz" >> /mnt/root/set.sh
+echo "tar -xzf /usr/share/grub/themes/yuan.tar.gz -C /boot/grub/themes/" >> /mnt/root/set.sh
+echo "echo \"GRUB_THEME=\"/boot/grub/themes/Yunli_cn/theme.txt\"\" >> /etc/default/grub" >> /mnt/root/set.sh
 #生成grub配置文件
 echo "grub-mkconfig -o /boot/grub/grub.cfg" >> /mnt/root/set.sh
 # 设置 root 密码
@@ -158,34 +163,45 @@ echo "echo 'aw ALL= (ALL) NOPASSWD: ALL' >> /etc/sudoers" >> /mnt/root/set.sh
 echo "mkdir -p /home/aw" >> /mnt/root/set.sh
 echo "chown -R aw:aw /home/aw" >> /mnt/root/set.sh
 
-
 # 设置开机自启的任务
 echo "systemctl enable NetworkManager" >> /mnt/root/set.sh
 echo "systemctl enable sshd" >> /mnt/root/set.sh
 echo "systemctl enable cronie" >> /mnt/root/set.sh
+echo "systemctl enable bluetooth" >> /mnt/root/set.sh
 echo "pacman-key --init" >> /mnt/root/set.sh
 echo "pacman-key --populate archlinux" >> /mnt/root/set.sh
 echo "pacman -S --noconfirm archlinuxcn-keyring archlinux-keyring arch4edu-keyring" >> /mnt/root/set.sh
 
+echo '# Kde
+yay -Sy --needed --noconfirm plasma konsole dolphin sddm kate spectacle
+sudo systemctl enable sddm
+yay -Sy --needed --noconfirm rime-ice-git fcitx5-skin-fluentdark-git
+echo "patch:
+  # 仅使用「雾凇拼音」的默认配置，配置此行即可
+  __include: rime_ice_suggestion:/
+  # 以下根据自己所需自行定义，仅做参考。
+  # 针对对应处方的定制条目，请使用 <recipe>.custom.yaml 中配置，例如 rime_ice.custom.yaml
+  __patch:
+    key_binder/bindings/+:
+      # 开启逗号句号翻页
+      - { when: paging, accept: comma, send: Page_Up }
+      - { when: has_menu, accept: period, send: Page_Down }" > /home/aw/.local/share/fcitx5/rime/default.custom.yaml
 
-# echo "#!/bin/bash" > /mnt/root/install_app.sh
-# echo "pacman -S --noconfirm archlinuxcn-keyring archlinux-keyring arch4edu-keyring" >> /mnt/root/install_app.sh
-# # 安装gnome桌面环境、ibus输入法
-# # echo "pacman -S --needed --noconfirm xorg " >> /mnt/root/install_app.sh
-# echo "pacman -S --noconfirm gnome " >> /mnt/root/install_app.sh
-# echo "pacman -S --noconfirm gdm " >> /mnt/root/install_app.sh
-# echo "pacman -S --noconfirm ibus-libpinyin " >> /mnt/root/install_app.sh
-# echo "pacman -S --noconfirm ibus-rime " >> /mnt/root/install_app.sh
-# echo "yay -S --noconfirm ttf-dejavu " >> /mnt/root/install_app.sh  
-# echo "systemctl enable gdm" >> /mnt/root/install_app.sh
-# #安装火狐浏览器
-# echo "pacman -S --noconfirm firefox firefox-i18n-zh-cn" >> /mnt/root/install_app.sh
+yay -Sy --needed --noconfirm sof-firmware alsa-firmware alsa-ucm-conf # 声音固件
+yay -Sy --needed --noconfirm ntfs-3g # 使系统可以识别 NTFS 格式的硬盘
+yay -Sy --needed --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra # 安装谷歌开源字体及表情
+yay -Sy --needed --noconfirm ark # 压缩软件。在 dolphin 中可用右键解压压缩包
+yay -Sy --needed --noconfirm packagekit-qt6 packagekit appstream-qt appstream # 确保 Discover（软件中心）可用，需重启
+yay -Sy --needed --noconfirm gwenview # 图片查看器
+flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub' > /mnt/home/aw/install_app.sh
+
 chmod a+x /mnt/root/set.sh
-# chmod a+x /mnt/root/install_app.sh
+chmod a+x /mnt/home/aw/install_app.sh
 
 arch-chroot /mnt /bin/bash /root/set.sh
+
+arch-chroot /mnt /bin/bash /home/aw/install_app.sh
 echo '###############Set system Done!####################'
-# arch-chroot /mnt /bin/bash /root/install_app.sh
 echo '###############app install Done!####################'
 umount -R /mnt
 reboot
