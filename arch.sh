@@ -172,7 +172,8 @@ echo "pacman-key --init" >> /mnt/root/set.sh
 echo "pacman-key --populate archlinux" >> /mnt/root/set.sh
 echo "pacman -S --noconfirm archlinuxcn-keyring archlinux-keyring arch4edu-keyring" >> /mnt/root/set.sh
 
-echo '# Kde
+
+echo "echo '# Kde
 yay -Sy --needed --noconfirm plasma konsole dolphin sddm kate spectacle
 sudo systemctl enable sddm
 yay -Sy --needed --noconfirm rime-ice-git fcitx5-skin-fluentdark-git
@@ -193,7 +194,8 @@ yay -Sy --needed --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fon
 yay -Sy --needed --noconfirm ark # 压缩软件。在 dolphin 中可用右键解压压缩包
 yay -Sy --needed --noconfirm packagekit-qt6 packagekit appstream-qt appstream # 确保 Discover（软件中心）可用，需重启
 yay -Sy --needed --noconfirm gwenview # 图片查看器
-flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub' > /mnt/home/aw/install_app.sh
+flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub' > /mnt/home/aw/install_app.sh" >> /mnt/root/set.sh
+
 
 chmod a+x /mnt/root/set.sh
 chmod a+x /mnt/home/aw/install_app.sh
