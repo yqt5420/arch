@@ -177,16 +177,15 @@ echo "echo '# Kde
 yay -Sy --needed --noconfirm plasma konsole dolphin sddm kate spectacle
 sudo systemctl enable sddm
 yay -Sy --needed --noconfirm rime-ice-git fcitx5-skin-fluentdark-git
-echo "patch:
+echo \"patch:
   # 仅使用「雾凇拼音」的默认配置，配置此行即可
   __include: rime_ice_suggestion:/
   # 以下根据自己所需自行定义，仅做参考。
-  # 针对对应处方的定制条目，请使用 <recipe>.custom.yaml 中配置，例如 rime_ice.custom.yaml
   __patch:
     key_binder/bindings/+:
       # 开启逗号句号翻页
       - { when: paging, accept: comma, send: Page_Up }
-      - { when: has_menu, accept: period, send: Page_Down }" > /home/aw/.local/share/fcitx5/rime/default.custom.yaml
+      - { when: has_menu, accept: period, send: Page_Down }\" > /home/aw/.local/share/fcitx5/rime/default.custom.yaml
 
 yay -Sy --needed --noconfirm sof-firmware alsa-firmware alsa-ucm-conf # 声音固件
 yay -Sy --needed --noconfirm ntfs-3g # 使系统可以识别 NTFS 格式的硬盘
@@ -194,7 +193,7 @@ yay -Sy --needed --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fon
 yay -Sy --needed --noconfirm ark # 压缩软件。在 dolphin 中可用右键解压压缩包
 yay -Sy --needed --noconfirm packagekit-qt6 packagekit appstream-qt appstream # 确保 Discover（软件中心）可用，需重启
 yay -Sy --needed --noconfirm gwenview # 图片查看器
-flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub' > /mnt/home/aw/install_app.sh" >> /mnt/root/set.sh
+flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub'" >> /mnt/root/set.sh
 
 
 chmod a+x /mnt/root/set.sh
