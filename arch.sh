@@ -193,7 +193,7 @@ yay -Sy --needed --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fon
 yay -Sy --needed --noconfirm ark # 压缩软件。在 dolphin 中可用右键解压压缩包
 yay -Sy --needed --noconfirm packagekit-qt6 packagekit appstream-qt appstream # 确保 Discover（软件中心）可用，需重启
 yay -Sy --needed --noconfirm gwenview # 图片查看器
-flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub'" >> /mnt/root/set.sh
+flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub'  > /home/aw/install_app.sh" >> /mnt/root/set.sh
 
 
 chmod a+x /mnt/root/set.sh
