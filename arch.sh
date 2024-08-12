@@ -177,6 +177,8 @@ echo "echo '# Kde
 yay -Sy --needed --noconfirm plasma konsole dolphin sddm kate spectacle
 sudo systemctl enable sddm
 yay -Sy --needed --noconfirm rime-ice-git fcitx5-skin-fluentdark-git
+mkdir -p /home/aw/.local/share/fcitx5/rime/
+chown -R aw:aw /home/aw/.local/share/fcitx5/rime/
 echo \"patch:
   # 仅使用「雾凇拼音」的默认配置，配置此行即可
   __include: rime_ice_suggestion:/
@@ -197,8 +199,6 @@ flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub'  > /home
 
 
 chmod a+x /mnt/root/set.sh
-chmod a+x /mnt/home/aw/install_app.sh
-
 arch-chroot /mnt /bin/bash /root/set.sh
 
 arch-chroot /mnt /bin/bash /home/aw/install_app.sh
